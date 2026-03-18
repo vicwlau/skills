@@ -1,7 +1,9 @@
 # Evals for New Skill
-- denied read access to certain folder
-- use google for `moma.corp.google.com.md`; internal intranet search/wiki system
-- subagents running into `503 capacity errors`
+- [] denied read access to certain folder. why didn't it have access?
+- [] use google for `moma.corp.google.com.md`; internal intranet search/wiki system. why?
+- [] subagents running into `503 capacity errors`
+- [] use `create-skill` to  create a new skill another time and test the whole eval workflow
+- [] `improve_description.py` script has an issue where it requires claude to run
 
 # Download a specific folder from a repo
 
