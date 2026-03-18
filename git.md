@@ -30,3 +30,9 @@ git checkout main
 ```bash | powershell
 rm -rf .git
 ```
+
+# Check for submodules
+
+```bash | powershell
+git submodule status
+```

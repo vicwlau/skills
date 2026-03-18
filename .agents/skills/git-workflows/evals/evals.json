@@ -1,0 +1,94 @@
+{
+  "skill_name": "git-workflows",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to clone https://github.com/tailwindlabs/tailwindcss and use it as a starting point for my own project. I don't want any of the original git history or remote connections. I'm on Windows.",
+      "expected_output": "Step-by-step PowerShell commands to: (1) shallow clone the repo with --depth 1, (2) remove the .git folder using Remove-Item -Recurse -Force, (3) optionally re-init a fresh git repo. Should mention checking/removing .gitmodules.",
+      "assertions": [
+        {
+          "name": "uses-powershell-syntax",
+          "description": "Uses Remove-Item -Recurse -Force .git (not rm -rf) since user is on Windows",
+          "type": "llm_grade"
+        },
+        {
+          "name": "uses-depth-flag",
+          "description": "Includes --depth 1 in the clone command for efficiency",
+          "type": "llm_grade"
+        },
+        {
+          "name": "mentions-gitmodules",
+          "description": "Mentions checking for or removing .gitmodules file",
+          "type": "llm_grade"
+        },
+        {
+          "name": "offers-fresh-init",
+          "description": "Suggests running git init after removal to start fresh",
+          "type": "llm_grade"
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "hey, i just want to grab the `apps/dashboard` folder from github.com/vercel/turbo — i don't need the whole repo. i'm on a mac",
+      "expected_output": "Bash command using bunx degit with the correct path format (vercel/turbo/apps/dashboard). Should mention npx degit as a fallback. Should NOT suggest cloning the whole repo unless explaining the sparse-checkout alternative.",
+      "assertions": [
+        {
+          "name": "uses-degit",
+          "description": "Recommends bunx degit or degit as the primary approach",
+          "type": "llm_grade"
+        },
+        {
+          "name": "correct-path-format",
+          "description": "The degit command uses OWNER/REPO/subpath format: vercel/turbo/apps/dashboard",
+          "type": "llm_grade"
+        },
+        {
+          "name": "uses-bash-syntax",
+          "description": "Gives bash commands (not PowerShell) since user is on Mac",
+          "type": "llm_grade"
+        },
+        {
+          "name": "mentions-fallback",
+          "description": "Mentions npx degit or sparse-checkout as a fallback for cases where degit doesn't work",
+          "type": "llm_grade"
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I'm about to add a payment integration to my app. How do I create a feature branch for this, do my work, and then merge it back to main when I'm done? I'm on Linux.",
+      "expected_output": "Step-by-step bash workflow: (1) checkout main and pull, (2) create feature branch with git checkout -b, (3) commit guidance with message convention, (4) how to stay synced with main during development, (5) how to merge back to main and push, (6) how to delete the branch. Should use bash syntax.",
+      "assertions": [
+        {
+          "name": "creates-descriptive-branch",
+          "description": "Shows git checkout -b with a descriptive name like feature/payment-integration",
+          "type": "llm_grade"
+        },
+        {
+          "name": "pulls-main-first",
+          "description": "Starts with git checkout main && git pull origin main before branching",
+          "type": "llm_grade"
+        },
+        {
+          "name": "covers-full-lifecycle",
+          "description": "Covers branch creation, committing, syncing with main, merging back, and cleanup",
+          "type": "llm_grade"
+        },
+        {
+          "name": "explains-rebase-vs-merge",
+          "description": "Mentions both rebase and merge for staying in sync, with a recommendation",
+          "type": "llm_grade"
+        },
+        {
+          "name": "includes-branch-deletion",
+          "description": "Includes commands to delete the feature branch both locally and remotely",
+          "type": "llm_grade"
+        }
+      ],
+      "files": []
+    }
+  ]
+}
