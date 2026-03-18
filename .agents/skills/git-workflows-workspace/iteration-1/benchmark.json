@@ -1,0 +1,139 @@
+{
+  "metadata": {
+    "skill_name": "git-workflows",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-03-18T17:32:05Z",
+    "evals_run": [
+      1
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "uses-powershell-syntax: Uses Remove-Item -Recurse -Force .git (not rm -rf) since user is on Windows",
+          "passed": true,
+          "evidence": "Response uses 'Remove-Item -Recurse -Force .git' explicitly in the PowerShell step. No rm -rf present."
+        },
+        {
+          "text": "uses-depth-flag: Includes --depth 1 in the clone command for efficiency",
+          "passed": true,
+          "evidence": "Step 1 uses 'git clone --depth 1 https://github.com/tailwindlabs/tailwindcss.git' with explanation that it fetches only the most recent commit."
+        },
+        {
+          "text": "mentions-gitmodules: Mentions checking for or removing .gitmodules file",
+          "passed": true,
+          "evidence": "Step 3 explicitly runs 'Get-Content .gitmodules' to check, then 'Remove-Item -ErrorAction SilentlyContinue .gitmodules' to delete it."
+        },
+        {
+          "text": "offers-fresh-init: Suggests running git init after removal to start fresh",
+          "passed": true,
+          "evidence": "Step 4 shows 'git init', 'git add .', and 'git commit' to initialize a new repo."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 2,
+        "failed": 2,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "uses-powershell-syntax: Uses Remove-Item -Recurse -Force .git (not rm -rf) since user is on Windows",
+          "passed": true,
+          "evidence": "Response uses 'Remove-Item -Recurse -Force .git'. Correct PowerShell syntax."
+        },
+        {
+          "text": "uses-depth-flag: Includes --depth 1 in the clone command for efficiency",
+          "passed": false,
+          "evidence": "Clone command is 'git clone https://github.com/tailwindlabs/tailwindcss.git' \u00e2\u20ac\u201d no --depth 1 flag present."
+        },
+        {
+          "text": "mentions-gitmodules: Mentions checking for or removing .gitmodules file",
+          "passed": false,
+          "evidence": ".gitmodules is never mentioned anywhere in the response."
+        },
+        {
+          "text": "offers-fresh-init: Suggests running git init after removal to start fresh",
+          "passed": true,
+          "evidence": "Step 3 shows 'git init', 'git add .', and 'git commit -m Initial commit'."
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.5,
+        "stddev": 0.0,
+        "min": 0.5,
+        "max": 0.5
+      },
+      "time_seconds": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.50",
+      "time_seconds": "+0.0",
+      "tokens": "+0"
+    }
+  },
+  "notes": []
+}

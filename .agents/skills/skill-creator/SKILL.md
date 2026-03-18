@@ -234,6 +234,8 @@ Put each with_skill version before its baseline counterpart.
 3. **Do an analyst pass** — read the benchmark data and surface patterns the aggregate stats might hide. See `agents/analyzer.md` (the "Analyzing Benchmark Results" section) for what to look for — things like assertions that always pass regardless of skill (non-discriminating), high-variance evals (possibly flaky), and time/token tradeoffs.
 
 4. **Launch the viewer** with both qualitative outputs and quantitative data:
+
+   **Bash (macOS / Linux / WSL):**
    ```bash
    nohup python <skill-creator-path>/eval-viewer/generate_review.py \
      <workspace>/iteration-N \
@@ -241,8 +243,44 @@ Put each with_skill version before its baseline counterpart.
      --benchmark <workspace>/iteration-N/benchmark.json \
      > /dev/null 2>&1 &
    VIEWER_PID=$!
+   # Confirm startup
+   sleep 2 && kill -0 $VIEWER_PID 2>/dev/null && echo "Viewer started OK (PID $VIEWER_PID)" || echo "WARNING: Viewer may have failed to start"
    ```
-   For iteration 2+, also pass `--previous-workspace <workspace>/iteration-<N-1>`.
+
+   **PowerShell (Windows):**
+   ```powershell
+   # Note: PowerShell requires distinct paths for stdout/stderr redirects — "NUL" cannot be used for both.
+   $proc = Start-Process python -ArgumentList @(
+       "<skill-creator-path>/eval-viewer/generate_review.py",
+       "<workspace>/iteration-N",
+       "--skill-name", "my-skill",
+       "--benchmark", "<workspace>/iteration-N/benchmark.json"
+   ) -PassThru -WindowStyle Hidden `
+     -RedirectStandardOutput "$env:TEMP\viewer_stdout.txt" `
+     -RedirectStandardError "$env:TEMP\viewer_stderr.txt"
+   $VIEWER_PID = $proc.Id
+   # Confirm startup
+   Start-Sleep -Seconds 2
+   if (-not $proc.HasExited) {
+     "Viewer started OK (PID $VIEWER_PID)"
+   } else {
+     "WARNING: Viewer may have failed to start (exit code: $($proc.ExitCode))"
+     Get-Content "$env:TEMP\viewer_stderr.txt" | Write-Host
+   }
+   ```
+
+    For iteration 2+, also pass `--previous-workspace <workspace>/iteration-<N-1>` in the arguments list.
+
+   **Windows tip:** The server-based approach above works, but on Windows it's often simpler and more reliable to use `--static` instead, which writes a standalone HTML file you can open directly in your browser — no running server needed:
+   ```powershell
+   python <skill-creator-path>\eval-viewer\generate_review.py `
+     <workspace>\iteration-N `
+     --skill-name "my-skill" `
+     --benchmark <workspace>\iteration-N\benchmark.json `
+     --static <workspace>\iteration-N\review.html
+   Start-Process "<workspace>\iteration-N\review.html"
+   ```
+   When the user clicks "Submit All Reviews", `feedback.json` will download to their `~/Downloads/` folder.
 
    **Cowork / headless environments:** If `webbrowser.open()` is not available or the environment has no display, use `--static <output_path>` to write a standalone HTML file instead of starting a server. Feedback will be downloaded as a `feedback.json` file when the user clicks "Submit All Reviews". After download, copy `feedback.json` into the workspace directory for the next iteration to pick up.
 
@@ -283,8 +321,19 @@ Empty feedback means the user thought it was fine. Focus your improvements on th
 
 Kill the viewer server when you're done with it:
 
+**Bash (macOS / Linux / WSL):**
 ```bash
 kill $VIEWER_PID 2>/dev/null
+sleep 1 && kill -0 $VIEWER_PID 2>/dev/null && echo "WARNING: Viewer still running" || echo "Viewer shut down OK"
+```
+
+**PowerShell (Windows):**
+```powershell
+Stop-Process -Id $VIEWER_PID -ErrorAction SilentlyContinue
+Start-Sleep -Seconds 1
+if ($proc.HasExited) { "Viewer shut down OK" } else { "WARNING: Viewer still running" }
+# Clean up temp log files
+Remove-Item "$env:TEMP\viewer_stdout.txt", "$env:TEMP\viewer_stderr.txt" -ErrorAction SilentlyContinue
 ```
 
 ---

@@ -75,15 +75,32 @@ def load_run_results(benchmark_dir: Path) -> dict:
     runs_dir = benchmark_dir / "runs"
     if runs_dir.exists():
         search_dir = runs_dir
-    elif list(benchmark_dir.glob("eval-*")):
-        search_dir = benchmark_dir
     else:
-        print(f"No eval directories found in {benchmark_dir} or {benchmark_dir / 'runs'}")
+        search_dir = benchmark_dir
+
+    # Find eval directories: any subdirectory that contains at least one config dir
+    # (e.g. with_skill/, without_skill/) which itself contains run-* subdirs.
+    # This accepts both "eval-N" and descriptive names like "clone-strip-history-windows".
+    _skip = {"runs", "node_modules", ".git", "__pycache__", "skill", "skill-snapshot"}
+
+    def _is_eval_dir(d: Path) -> bool:
+        if not d.is_dir() or d.name in _skip:
+            return False
+        return any(
+            run.is_dir()
+            for config in d.iterdir() if config.is_dir()
+            for run in config.glob("run-*")
+        )
+
+    eval_dirs = sorted(d for d in search_dir.iterdir() if _is_eval_dir(d))
+
+    if not eval_dirs:
+        print(f"No eval directories found in {search_dir}")
         return {}
 
     results: dict[str, list] = {}
 
-    for eval_idx, eval_dir in enumerate(sorted(search_dir.glob("eval-*"))):
+    for eval_idx, eval_dir in enumerate(eval_dirs):
         metadata_path = eval_dir / "eval_metadata.json"
         if metadata_path.exists():
             try:
@@ -389,7 +406,7 @@ def main():
     configs = [k for k in run_summary if k != "delta"]
     delta = run_summary.get("delta", {})
 
-    print(f"\nSummary:")
+    print("\nSummary:")
     for config in configs:
         pr = run_summary[config]["pass_rate"]["mean"]
         label = config.replace("_", " ").title()

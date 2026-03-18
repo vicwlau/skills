@@ -1,3 +1,8 @@
+# Evals for New Skill
+- denied read access to certain folder
+- use google for `moma.corp.google.com.md`; internal intranet search/wiki system
+- subagents running into `503 capacity errors`
+
 # Download a specific folder from a repo
 
 ```bash | powershell
