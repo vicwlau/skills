@@ -1,0 +1,1 @@
+This is the directory where Antigravity Skills are stored.

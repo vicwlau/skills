@@ -8,6 +8,15 @@
 - [What are skills?](https://agentskills.io/what-are-skills.md): Agent Skills are a lightweight, open format for extending AI agent capabilities with specialized knowledge and workflows.
 - [Anthropic's Repository](https://github.com/anthropics/skills)
 
+# Antigravity Skills
+
+- `<workspace-root>/.agents/skills/<skill-folder>/`: Workspace-specific
+- `~/.gemini/antigravity/skills/<skill-folder>/`: Global (all workspaces)
+
+---
+
+# Anthropic Skills
+
 > ## Documentation Index
 >
 > Fetch the complete documentation index at: https://agentskills.io/llms.txt
