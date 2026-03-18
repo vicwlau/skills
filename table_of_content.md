@@ -1,3 +1,7 @@
+# General
+
+- [development-guardrails](file:///c:/Users/victo/Documents/github/skills/development-guardrails/SKILL.md): Sacred naming conventions and package manager permissions.
+
 # Data Persistence
 
 ## Local
@@ -6,9 +10,8 @@
 
 ## Cloud
 
+- [fastapi-firestore-service](file:///c:/Users/victo/Documents/github/skills/fastapi-firestore-service/SKILL.md): Scalable FastAPI + Firestore architecture.
 - `postgres?`
-- `firebase?`
-- `gcp_bucket?`
 
 # UI / UX
 
