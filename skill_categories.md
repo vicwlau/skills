@@ -4,21 +4,23 @@
 
 # Data Persistence
 
-- *Local*
-    - `sqlalchemy2.skills.md`: A skill for persisting data using SQLAlchemy 2.0.
-- *Cloud*
-    - [fastapi-firestore-service](file:///c:/Users/victo/Documents/github/skills/fastapi-firestore-service/SKILL.md): Scalable FastAPI + Firestore architecture.
-    - `postgres?`
+- _Local_
+  - `sqlalchemy2.skills.md`: A skill for persisting data using SQLAlchemy 2.0.
+- _Cloud_
+  - [fastapi-firestore-service](file:///c:/Users/victo/Documents/github/skills/fastapi-firestore-service/SKILL.md): Scalable FastAPI + Firestore architecture.
+  - `postgres?`
 
 # UI / UX
 
 - Animation
 - CSS / HTML
+- `refactoring-ui`
 
 # Agents
 
 - Orchestration
 - Specialized Sub-Agents
+- `uvx showboat --help`
 
 # React
 
@@ -27,7 +29,7 @@
 # Extensions (APIs)
 
 - Gemini
-    - [github_skills](https://github.com/google-gemini/gemini-skills/blob/main/skills/gemini-interactions-api/SKILL.md)
+  - [github_skills](https://github.com/google-gemini/gemini-skills/blob/main/skills/gemini-interactions-api/SKILL.md)
 - YouTube
 
 ## MCP
